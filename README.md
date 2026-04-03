@@ -1096,6 +1096,199 @@ Used when FT and HA don’t work***
     
     ![Untitled](img/Untitled%205.png)
     
+# AWS SAA-C03 DNS and Route 53 Questions
+
+## Question 1: Custom Domain Names with S3
+
+**Question:** To use a custom name and URL when hosting a static website in a bucket, what two services of AWS are required?
+
+**Options:**
+- S3 and DynDNS
+- S3 and ELB
+- S3 and Route 53
+- S3 and ElastiCache
+
+**Correct Answer:** S3 and Route 53
+
+**Explanation:** S3 is used to store the static website files; however, it would use a URL like `bucket_name.s3-website-us-west-1.amazonaws.com`. To also use a custom name, Route 53, the AWS DNS service, is required. DynDNS is not an AWS service. ELB and ElastiCache will not help to provide a custom DNS name.
+
+---
+
+## Question 2: AWS DNS Service
+
+**Question:** What service within AWS provides for DNS name management and resolution?
+
+**Options:**
+- Route 47
+- Route 53
+- Kinesis
+- ENI
+
+**Correct Answer:** Route 53
+
+**Explanation:** Route 53 is the AWS DNS service. ENI is the Elastic Network Interface, which may be attached to an instance and provided an Elastic IP (EIP) address, which is routable on the Internet. Kinesis is for working with real-time data streams. Route 47 does not exist in AWS.
+
+---
+
+## Question 3: Route 53 Simple Routing Policy
+
+**Question:** You must plan a Route 53 deployment in AWS. What routing policy is used to send all traffic to a single resource?
+
+**Options:**
+- Geolocation routing
+- Simple routing
+- Latency-based routing
+- Route 53 is not used in this way
+
+**Correct Answer:** Simple routing
+
+**Explanation:** Simple routing routes all traffic to a particular resource. This is typical DNS name resolution. Geolocation routing routes based on the location of the requestor. Latency-based routing routes based on the delay in communications between the source and the various possible resources.
+
+---
+
+## Question 4: Route 53 Hosted Zones
+
+**Question:** What is the container used to store DNS records called in Route 53?
+
+**Options:**
+- Hosted zone
+- DNS resolver
+- DNS record
+- Authoritative name server
+
+**Correct Answer:** Hosted zone
+
+**Explanation:** The hosted zone is the container object for the DNS records. The DNS resolver is the role of Route 53 - resolving DNS host names and other records. The authoritative name server is a name server having definitive information about a portion of the DNS system. A DNS record is an individual record stored in the hosted zone container.
+
+---
+
+## Question 5: Route 53 Invalid Routing Policies
+
+**Question:** When multiple resources can perform the same function, which one of the following is NOT a valid routing policy that Route 53 can use to select the appropriate resource for a request?
+
+**Options:**
+- Geo DNS routing
+- Weighted round robin
+- OS-based routing
+- Latency-based routing
+
+**Correct Answer:** OS-based routing
+
+**Explanation:** Route 53 supports:
+- Geo DNS routing (based on geographic location)
+- Failover routing (active/passive)
+- Latency-based routing (based on network latency)
+- Weighted round robin (traffic distribution by percentage)
+
+Route 53 does NOT support redirection based on the OS of the requesting system.
+
+---
+
+## Question 6: Global Route 53 Service
+
+**Question:** You have been asked by your employer to create an identical copy of your production environment in another region for disaster recovery purposes. Which of the following AWS resources would you NOT need to re-create because they are available universally across the console? *(Choose two.)*
+
+**Options:**
+- Route 53
+- Elastic Load Balancers
+- Identity Access Management roles
+- Security groups
+- EC2 key pairs
+
+**Correct Answers:**
+- Route 53
+- Identity Access Management roles
+
+**Explanation:** Route 53 and IAM are global services, so it does not matter which region you choose because you can leverage them globally. Conversely, ELB, security groups, and EC2 key pairs are tied to a particular region.
+
+---
+
+## Question 7: Latency-Based Routing for Performance
+
+**Question:** You are running a media-rich website with a global audience in US-EAST-1. Users in Japan and Australia are experiencing slow response times. How might you improve your page load times? *(Choose three.)*
+
+**Relevant Option:**
+- Set up a read replica of your production environment in the Asia Pacific region and configure latency-based routing on Route 53.
+
+**Correct Answer:** This is one of the correct options.
+
+**Explanation:** Latency-based routing in Route 53 directs traffic to the geographically closest resource with the lowest network latency, improving performance for users in remote regions.
+
+---
+
+## Question 8: Route 53 Geoproximity Routing
+
+**Question:** An insurance company has a web application that serves users in the United Kingdom and Australia. The application includes a database tier using a MySQL database hosted in eu-west-2. The web tier runs from eu-west-2 and ap-southeast-2. Amazon Route 53 geoproximity routing is used to direct users to the closest web tier. It has been noted that Australian users receive slow response times to queries.
+
+Which changes should be made to the database tier to improve performance?
+
+**Options:**
+- Migrate the database to Amazon DynamoDB. Use DynamoDB global tables to enable replication to additional Regions
+- **Migrate the database to an Amazon Aurora global database in MySQL compatibility mode. Configure read replicas in ap-southeast-2**
+- Migrate the database to Amazon RDS for MySQL. Configure Multi-AZ in the Australian Region
+- Deploy MySQL instances in each Region. Deploy an Application Load Balancer in front of MySQL to reduce the load on the primary instance
+
+**Correct Answer:** Migrate the database to an Amazon Aurora global database in MySQL compatibility mode. Configure read replicas in ap-southeast-2
+
+**Explanation:** The issue is latency with read queries being directed from Australia to UK across great physical distance. An Aurora global database consists of one primary AWS Region where data is mastered, and up to five read-only secondary AWS Regions. Aurora replicates data to secondary AWS Regions with typical latency of under a second. This solution provides better performance for users in the Australia Region for queries, while writes must still take place in the UK Region.
+
+---
+
+## Question 9: Route 53 with Failover Routing
+
+**Question:** A new application is to be published in multiple regions around the world. The Architect needs to ensure only 2 IP addresses need to be whitelisted. The solution should intelligently route traffic for lowest latency and provide fast regional failover.
+
+**Hint:** Route 53 failover routing uses a primary and standby configuration - it sends all traffic to the primary until it fails a health check, at which time it sends traffic to the secondary. This does not intelligently route traffic for lowest latency.
+
+**Note:** For lowest latency with multiple regions, use Global Accelerator or latency-based routing, not failover routing.
+
+---
+
+## Question 10: Disaster Recovery with DNS Changes
+
+**Question:** A company is implementing a disaster recovery plan with an RTO of 20 hours and RPO of 1 hour. Which of the following solutions best meets the requirements?
+
+**Correct Solution:** Work with the customer's engineers to identify the key servers and data. Help them set up an AWS account with IAM users, groups, and roles. Build templates of the critical web/app servers and save these as AMIs. Set up the Storage Gateway and the Snapshot schedule to meet the RPO. Document, script, or automate the steps to initiate the RDS instance, the EC2 instances, **the steps to restore the latest data from the Storage Gateway snapshots into RDS, plus any DNS changes.** Test the process with each of the operations team's shifts.
+
+**Note:** DNS changes are an important part of disaster recovery failover procedures.
+
+---
+
+## Question 11: Migrating DNS to Route 53
+
+**Question:** A customer is implementing a disaster recovery solution and wants to mitigate the risk of a catastrophic NAS failure. Which solution includes DNS migration?
+
+**Correct Solution:** Migrate the in-house DNS to Route 53 to simplify cutover.
+
+**Explanation:** Moving DNS to Route 53 provides a scalable, reliable DNS service that can be managed globally and reduces the dependency on on-premises DNS infrastructure.
+
+---
+
+## Summary: Route 53 Routing Policies
+
+| Routing Policy | Use Case |
+|---|---|
+| **Simple Routing** | Single resource, basic DNS resolution |
+| **Weighted Round Robin** | Distribute traffic by percentage across multiple resources |
+| **Latency-Based** | Route to lowest latency endpoint for better performance |
+| **Failover** | Active-passive configuration with health checks |
+| **Geolocation** | Route based on geographic location of requestor |
+| **Geoproximity** | Route based on geographic location with bias adjustment |
+| **Multi-Value Answer** | Return multiple healthy resource IPs |
+
+---
+
+## Key Route 53 Concepts
+
+- **DNS Service**: AWS's Domain Name System service for managing domain names and routing
+- **Hosted Zones**: Containers that hold all DNS records for a specific domain
+- **Health Checks**: Monitor resource health and trigger failover
+- **Traffic Policies**: Define routing rules for more complex scenarios
+- **Alias Records**: Special Route 53 records that map to AWS resources (ELB, CloudFront, S3, etc.)
+- **Global Service**: Available worldwide without regional restrictions
+- **DNS Resolution**: Translates domain names into IP addresses
+- **Failover Routing**: Active-passive configuration for disaster recovery
+
 
 
 
