@@ -70,6 +70,381 @@ May be good practice to create multiple AWS Accounts for different uses (prod, d
 
 **Secret Access Key:** oierWRhoefWORIOF/DFLWAnljef
 
+# AWS SAA-C03 IAM Questions
+
+## Question 1: Owner Concept in AWS
+
+**Question:** When you're editing permissions (policies and ACLs), to whom does the concept of the "owner" refer?
+
+**Options:**
+- There is no special concept of "owner" in AWS.
+- The owner is the IAM user who created the object via the GUI, CLI, or API.
+- "Owner" refers to the identity and e-mail address used to create the AWS account.
+- The owner is IAM role used to create the object via the GUI, CLI, or API.
+
+**Correct Answer:** "Owner" refers to the identity and e-mail address used to create the AWS account is correct. In AWS, the context of the owner of the account is root, which needs to be logged in using the username/password combination.
+
+**Incorrect Answers:** The owner is the IAM user who created the object via the GUI, CLI, or API and The owner is IAM role used to create the object via the GUI, CLI, or API are incorrect because neither of these is the correct explanation of the owner. There is no special concept of "owner" in AWS is incorrect because there is a concept of "owner" in AWS.
+
+---
+
+## Question 2: Assigning Permissions to Multiple Users
+
+**Question:** What can be used to assign permissions to more than one user login without having to modify each login individually?
+
+**Options:**
+- Groups
+- Collections
+- ACL
+- NACL
+
+**Correct Answer:** Groups is the correct answer. AWS Identity and Access Management (IAM) supports the use of groups for such scenarios. Create a group, assign permissions to the group, and place logins in the group. Collections are not supported in AWS and NACLs/ACLs do not provide a solution to this scenario.
+
+---
+
+## Question 3: Secure Console Access for IAM Users
+
+**Question:** You are a solutions architect working for a construction company. Your company is migrating its production estate to AWS, and you are in the process of setting up access to the AWS console using Identity Access Management (IAM). You have created 15 users for your system administrators. What further steps do you need to take to enable your system administrators to get access to the AWS console in a secure fashion? *(Choose two.)*
+
+**Options:**
+- Have each user set up multifactor authentication once they have logged in to the console.
+- Get the systems administrators to download the CLI and configure it on their laptop, using their usernames and passwords.
+- Give the system administrators the secret access key and access key ID, and tell them to use these credentials to log in to the AWS console.
+- Generate a password for each user and give these passwords to your system administrators.
+
+**Correct Answers:**
+- Have each user set up multifactor authentication once they have logged in to the console.
+- Generate a password for each user and give these passwords to your system administrators.
+
+**Incorrect Answers:**
+- Give the system administrators the secret access key and access key ID, and tell them to use these credentials to log in to the AWS console — **Incorrect** because you cannot use the secret access key and access key ID to log in to the AWS console; rather, these credentials are used to call Amazon APIs.
+- Get the systems administrators to download the CLI and configure it on their laptop, using their usernames and passwords — **Incorrect** because for the AWS CLI, you need an access key ID and secret access key.
+
+---
+
+## Question 4: Firewall Audit with IAM
+
+**Question:** Your security manager has hired a security contractor to audit your firewall implementation. When the consultant asks for the login details for the firewall appliance, which of the following might you do? *(Choose two.)*
+
+**Options:**
+- Tell him the details of the web application firewall.
+- Explain that AWS is a cloud service and that AWS manages the network appliances.
+- Create an IAM role with a policy that can read Security Group and Route settings.
+- Create an IAM role with a policy that can read Security Group and NACL settings.
+- Explain that AWS implements network security differently and that there is no such thing as a firewall appliance. Create an IAM user with a policy that can read Security Group and Route settings.
+
+**Correct Answers:**
+- Tell him the details of the web application firewall.
+- Explain that AWS implements network security differently and that there is no such thing as a firewall appliance. Create an IAM user with a policy that can read Security Group and Route settings.
+
+**Note:** AWS has removed the firewall appliance from the hub of the network and implemented the firewall functionality as stateful Security Groups and stateless subnet NACLs.
+
+**Incorrect Answers:**
+- Create an IAM role with a policy that can read Security Group and Route settings — **Incorrect** because you need to create a user with a policy and not a role with a policy.
+- Explain that AWS is a cloud service and that AWS manages the network appliances — **Incorrect** because although AWS manages the network appliance, you can still give the requested info to the security consultant.
+- Create an IAM role with a policy that can read Security Group and NACL settings — **Incorrect** because the answer is incomplete.
+
+---
+
+## Question 5: Global IAM Resources
+
+**Question:** You have been asked by your employer to create an identical copy of your production environment in another region for disaster recovery purposes. Which of the following AWS resources would you NOT need to re-create because they are available universally across the console? *(Choose two.)*
+
+**Options:**
+- Route 53
+- Elastic Load Balancers
+- Identity Access Management roles
+- Security groups
+- EC2 key pairs
+
+**Correct Answers:**
+- Route 53
+- Identity Access Management roles
+
+**Explanation:** Route 53 and IAM are global services, so it does not matter which region you choose because you can leverage them globally. Conversely, ELB, security groups, and EC2 key pairs are tied to a particular region.
+
+---
+
+## Question 6: IAM Administration and EC2 Vulnerabilities
+
+**Question:** Even if all best practices are being followed in IAM administration, what can present vulnerabilities related to your EC2 instances?
+
+**Options:**
+- Improper IAM group usage
+- Improper IAM user account creation
+- OS security issues within the instances
+- Improper IAM role usage
+
+**Correct Answer:** OS security issues within the instances is the correct answer. Even when best practices are followed in IAM, as it is focused on securing access to the AWS cloud, the operating systems running within your EC2 instances can still present security issues.
+
+---
+
+## Question 7: Security Groups in IAM
+
+**Question:** To what are security groups applied within an AWS IAM managed solution?
+
+**Options:**
+- Subnets
+- Groups
+- Users
+- Network interfaces
+
+**Correct Answer:** Network interfaces is the correct answer. Security groups are applied to network interfaces, the "groups" used in AWS IAM for user management are simply called groups and not security groups. This can be a point of confusion for many new users of AWS.
+
+---
+
+## Question 8: Root Login Capabilities
+
+**Question:** What login has the ability to cancel an AWS subscription?
+
+**Options:**
+- Any login
+- Any account admin login
+- Any admin login
+- Root login
+
+**Correct Answer:** Root login is the correct answer. Only the root login can change the AWS support plan, cancel the account, open a billing support case, and perform several other account-related actions. For this reason, the root login should be secured and used only when these actions are required.
+
+---
+
+## Question 9: IAM Compliance Standards
+
+**Question:** What common security standard is IAM in compliance with that allows for credit card data to be processed?
+
+**Options:**
+- GDPR
+- HIPAA
+- GLBA
+- PCI-DSS
+
+**Correct Answer:** PCI-DSS is the correct answer. The Payment Card Industry-Data Security Standard (PCI-DSS) specifies operational procedures and methods to support secure payment card processing and IAM complies with this standard. HIPAA is related to health information privacy, GLBA is about financial accounting, and GDPR is a European Union privacy standard.
+
+---
+
+## Question 10: Root User Account
+
+**Question:** What IAM account is accessed using an e-mail address and has unlimited permissions within AWS?
+
+**Options:**
+- All administrator users
+- Any user in a group
+- Root user
+- Standard created user
+
+**Correct Answer:** Root user is the correct answer. The root user account can do anything in relation to the AWS account and is accessed by logging in with the e-mail address used to create the account. As a best practice, this account should not be used for daily administration and should have multi-factor authentication (MFA) enabled.
+
+---
+
+## Question 11: IAM Password Policy Configuration
+
+**Question:** You are designing a password policy for IAM users. Which one of the following cannot be configured for password policies in the AWS Console?
+
+**Options:**
+- Prevent passwords including the user's last name
+- Enable password expiration
+- Require at least one number
+- Minimum password length
+
+**Correct Answer:** Prevent passwords including the user's last name is the correct answer. You cannot prevent passwords including the user's last name in the password policies for IAM. However, you can specify:
+- Minimum password length
+- Uppercase letters requirement
+- Lowercase letters requirement
+- Numbers requirement
+- Nonalphanumeric characters requirement
+- Voluntary user password changes
+- Password expiration
+- Prevent password reuse
+- Password expiration requires administrator reset
+
+---
+
+## Question 12: Managing NACL Permissions with IAM
+
+**Question:** You want to limit who can modify a NACL that is associated with a subnet. What can you use?
+
+**Options:**
+- Security Group
+- Another NACL
+- Flow log
+- IAM
+
+**Correct Answer:** IAM is the correct answer. A NACL is an object that can be configured with permissions, so you can use IAM to decide who can and cannot manage the NACL. The other options in no way provide permission management for NACL objects.
+
+---
+
+## Question 13: Disaster Recovery with IAM Setup
+
+**Question:** Your client has been experiencing problems with their aging in-house infrastructure and is extremely concerned about managing the cost of maintaining their online presence. Which of the following solutions best meet the requirements for DR with RTO of 20 hours and RPO of 1 hour?
+
+**Correct Solution:** Work with the customer's engineers to identify the key servers and data. Help them set up an AWS account with **IAM users, groups, and roles**. Build templates of the critical web/app servers and save these as AMIs. Agree upon RDS specifications that meet the stated requirements. Set up the Storage Gateway and the Snapshot schedule to meet the RPO. Document, script, or automate the steps to initiate the RDS instance, the EC2 instances, and the steps to restore the latest data from the Storage Gateway snapshots into RDS, plus any DNS changes.
+
+**Note:** This includes proper IAM setup with users, groups, and roles as part of the disaster recovery solution.
+
+---
+
+## Question 14: Authentication Methods for Programmatic Access
+
+**Question:** What authentication method can be used for programmatic or CLI-based access that avoids the use of usernames and passwords?
+
+**Options:**
+- Access Key ID/Username
+- Username/Secret Access Key
+- Password/Access Key ID
+- Access Key ID/Secret Access Key
+
+**Correct Answer:** Access Key ID/Secret Access Key is the correct answer. The AWS Access Keys are a combination of an Access Key ID and a secret access key. Using this method allows for programmatic access to AWS services and can also be beneficial when performing command-line interface (CLI) operations.
+
+---
+
+## Question 15: AWS Access Key Security
+
+**Question:** What should be implemented to ensure security when using AWS Access Keys?
+
+**Options:**
+- Key Decryption
+- Key Encryption
+- Password-protected keys
+- Key Rotation
+
+**Correct Answer:** Key rotation is the correct answer. Key rotation is used to retire older keys. The longer keys are used, the more likely they have been compromised. Rotate keys by:
+1. Generating new keys
+2. Updating applications and users with the new keys
+3. Deactivating the old keys
+4. Monitoring to ensure you've captured all of the use cases for the keys
+
+---
+
+## Question 16: Securing Application API Credentials with IAM
+
+**Question:** You are in the process of deploying an application in an EC2 instance. The application must call AWS APIs. What is the secured way of passing credentials to the application?
+
+**Options:**
+- Use a DynamoDB to store the API credentials.
+- **Assign IAM roles to the EC2 instance.**
+- Pass the API credentials to the instance using instance user data.
+- Keep API credentials as an object in Amazon S3.
+
+**Correct Answer:** Assign IAM roles to the EC2 instance is correct. You need to use IAM roles to pass credentials to the application in a secured way.
+
+**Incorrect Answers:**
+- Use a DynamoDB to store the API credentials and Keep API credentials as an object in Amazon S3 — **Incorrect** because if you store the API credentials in DynamoDB or S3, the question arises as to how the EC2 instance is going to connect to DynamoDB or S3, which has to be via IAM roles.
+- Pass the API credentials to the instance using instance user data — **Incorrect** because passing API credentials to the instance using instance user data is not secure, as API credentials may change or you might change the EC2 server.
+
+---
+
+## Question 17: IAM Roles for EKS Pods
+
+**Question:** A logistics company is running a containerized application on Amazon EKS. The application includes a management dashboard that uses DynamoDB and a reporting service that uses S3. Which solution allows different Pods to have different access permissions?
+
+**Correct Answer:** Create separate IAM roles with policies for Amazon S3 and DynamoDB access. Use Kubernetes service accounts with **IAM Role for Service Accounts (IRSA)** to assign the appropriate policies to each service's Pods.
+
+**Note:** This is the correct approach for providing fine-grained access control using IRSA.
+
+---
+
+## Question 18: Shared Responsibility Model
+
+**Question:** What is the model used within AWS wherein AWS guarantees the secure operation of the cloud and the customer ensures the security of that which is placed in the cloud?
+
+**Options:**
+- Customer Responsibility
+- Shared Responsibility
+- Provider Responsibility
+- User Responsibility
+
+**Correct Answer:** Shared Responsibility is the correct answer. The Shared Responsibility model is used in AWS. It states that AWS will secure the cloud itself, but the customer or user must secure that which they place in the cloud. For example, the customer must secure the operating system running in an EC2 instance as AWS will not control or manage that which runs in an instance.
+
+---
+
+## Question 19: Root Login Security Best Practice
+
+**Question:** What security best practice should be implemented for the root login immediately after creating an AWS account?
+
+**Options:**
+- Enable MFA
+- Disable MFA
+- Delete the root login
+- Enable root login firewalling
+
+**Correct Answer:** Enable MFA is the correct answer. You should enable multi-factor authentication (MFA) for the root login and create another account for administrative actions immediately upon creating a new AWS account. You should not delete the root login and, in fact, cannot, as it is the only account that can perform specific account management actions.
+
+---
+
+## Question 20: Enforcing Password Policies
+
+**Question:** How should you enforce the use of an 8-character password for all AWS logins?
+
+**Options:**
+- Through a password policy
+- For each login created
+- For each group
+- You cannot enforce such settings
+
+**Correct Answer:** Through a password policy is the correct answer. You can create a password policy that is then applied to logins. The policy can define password characteristics and the frequency at which passwords must be changed.
+
+---
+
+## Question 21: Number of Roles Per Instance
+
+**Question:** You are working with roles. How many roles can be assigned to an instance?
+
+**Options:**
+- 1
+- 5
+- Unlimited
+- 2
+
+**Correct Answer:** 1 is the correct answer. An instance can have only one role assigned at a time.
+
+---
+
+## Question 22: When Role Changes Take Effect
+
+**Question:** You are working with roles. When changes are made to roles, when do they take effect?
+
+**Options:**
+- When any associate instance is restarted
+- Immediately
+- When resources become available
+- When the active role is no longer actively used
+
+**Correct Answer:** Immediately is the correct answer. Any changes made to roles are effective immediately. There is no delay or wait for resources.
+
+---
+
+## Question 23: Root-Level Access to Operating Systems
+
+**Question:** In which of the following services can you have root-level access to the operating system? *(Choose two.)*
+
+**Options:**
+- Amazon EMR
+- Amazon DynamoDB
+- Amazon RDS
+- Amazon EC2
+
+**Correct Answers:**
+- Amazon EC2
+- Amazon EMR
+
+**Incorrect Answers:**
+- Amazon RDS and Amazon DynamoDB are managed services for which you don't have root-level access.
+
+---
+
+## Summary of Key IAM Concepts
+
+- **IAM Users**: Individual identities for accessing AWS
+- **IAM Groups**: Collections of users with permissions assigned to the group
+- **IAM Roles**: Temporary identity with specific permissions (no long-term credentials)
+- **IAM Policies**: Documents that define permissions
+- **Password Policies**: Enforce password standards across all IAM users
+- **Access Keys**: Programmatic credentials for API/CLI access
+- **Root User**: Account created with AWS account, has full permissions
+- **MFA**: Multi-factor authentication for enhanced security
+- **Key Rotation**: Regularly update access keys for security
+- **IRSA**: IAM Role for Service Accounts for fine-grained K8s Pod access
+- **Shared Responsibility Model**: AWS secures the infrastructure, you secure your resources
+
 
 
 # ☁️ Cloud Computing Fundamentals
