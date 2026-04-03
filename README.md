@@ -744,6 +744,431 @@ Provide access to VMs known as instances*
     - Protocol Port 3389
 - Linux: SSH protocol
     - Port 22
+# EC2 Certification Study Guide
+
+## EC2 Instance Types & Tenancy
+
+### Question 1: Dedicated Host for EC2 Instances
+**When should you use a dedicated host for an EC2 instance?**
+- When you require a license based on the number of users
+- When you require a license to be locked to the hardware
+- When you require a license file associated with an application installation
+- When you will use more than one application on the instance
+
+**Correct Answer:** When you require a license to be locked to the hardware
+
+A dedicated host provides a solution to specific licensing scenarios that require the license be locked to hardware, the number of CPU sockets, etc. Licenses based on the number of users or license files can work on any tenancy model. Using more than one application is possible with any tenancy model.
+
+---
+
+### Question 2: EC2 Instance Families for Database IOPS
+**You are running a Mongo database that requires access to tens of thousands of low-latency IOPS. Which of the following EC2 instance families would best suit your needs?**
+- Cluster GPU instances
+- High I/O instances
+- Dense storage instances
+- Memory-optimized instances
+
+**Correct Answer:** High I/O instances
+
+High I/O instances use SSD-based local instance storage to deliver very high, low-latency I/O capacity to applications, and they are optimized for applications that require tens of thousands of IOPS.
+
+---
+
+### Question 3: EC2 Instance Type for Cost Savings - Spot Instances
+**What EC2 instance type can be used to provide up to a 90% discount off on-demand instance prices?**
+- Reduced Cost instance
+- Spot instance
+- Downgraded instance
+- Automatic instance
+
+**Correct Answer:** Spot instance
+
+Spot instances run whenever capacity is available and the maximum price for a request exceeds the Spot price. They should only be used when your process includes the flexibility of running with interruption and running whenever it can as opposed to specific required times. On-Demand instances are also used when you desire to reduce costs over always-on instances but allows for launching at specific required times.
+
+---
+
+### Question 4: EC2 Instance Tenancy
+**Which of the following is NOT a global AWS resource and is instead specific to only one region?**
+- Route 53
+- Identity Access Management roles
+- EC2 key pairs
+- ELB/Security groups
+
+**Correct Answer:** EC2 key pairs (along with ELB and Security groups)
+
+Route 53 and IAM are global services, so it does not matter which region you choose because you can leverage them globally. Conversely, ELB, security groups, and EC2 key pairs are tied to a particular region.
+
+---
+
+## EC2 Storage & Performance
+
+### Question 5: Encrypting Data at Rest on EC2
+**Your company has a policy of encrypting all data at rest. You host your production environment on EC2 in a non-default VPC. Attached to your EC2 instances are multiple EBS volumes, and you must ensure this data is encrypted. Which of the following options will allow you to do this? (Choose three.)**
+- Encrypt the data inside your application, before storing it on EBS.
+- EBS volumes are encrypted by default. You do not need to do anything.
+- Use third-party volume encryption tools.
+- Encrypt the data using native encryption tools available in the operating system.
+- Install SSL certificates on the servers so as to encrypt your data.
+
+**Correct Answers:** 
+- Use third-party volume encryption tools
+- Encrypt the data using native encryption tools available in the operating system
+- Encrypt the data inside your application, before storing it on EBS
+
+These answers cover all the options required to encrypt data at rest.
+
+**Incorrect Answers:**
+- SSL certificates will only encrypt data in transit, not data at rest
+- EBS volumes are not encrypted by default
+
+---
+
+### Question 6: Attaching Elements to EC2 Instances
+**To how many maximum elements can a single EC2 instance be attached?**
+- 28
+- 27
+- 2
+- 1
+
+**Correct Answer:** 28
+
+An EC2 instance can be attached to up to 28 elements, such as network interfaces and EBS volumes. For example, if you attach one network interface, you can also attach 27 EBS volumes.
+
+---
+
+### Question 7: EBS Volume Selection - Lowest Cost
+**You must attach an EBS volume to an EC2 instance that offers 500 GiB of storage at the lowest cost. What EBS type should be used?**
+- Throughput-optimized HDD
+- Provisioned IOPS
+- Cold HDD
+- General SSD
+
+**Correct Answer:** Cold HDD
+
+Cold HDD is the lowest cost storage solution. General (or General Purpose) SSD is more expensive, though not as expensive as Provisioned IOPS. Throughput-optimized HDD is magnetic storage, like Cold HDD, but is not as inexpensive as Cold HDD.
+
+---
+
+### Question 8: EBS Volume Selection - Highest Performance
+**You must attach an EBS volume to an EC2 instance that offers the highest level of performance. What EBS type should be used?**
+- Provisioned IOPS SSD
+- Striped SSD
+- Magnetic
+- General SSD
+
+**Correct Answer:** Provisioned IOPS SSD
+
+A provisioned IOPS SSD will provide the optimum performance. A general SSD would be next. Magnetic storage provides the least performance, but it also provides the least cost.
+
+---
+
+### Question 9: Virtual Hard Disks for EC2
+**You want to provide multiple virtual hard disks to an EC2 instance. What can you attach to an instance to provide these virtual hard disks?**
+- EIP
+- VPC
+- NACL
+- EBS volume
+
+**Correct Answer:** EBS volume
+
+Multiple Elastic Block Store (EBS) volumes can be attached to an EC2 instance to act as hard disks. Several EBS volume types exist providing different performance levels. A VPC is a virtual network segment. A NACL is a network access control list used as a firewall for a VPC. An Elastic IP (EIP) address is a statically assigned IP address.
+
+---
+
+### Question 10: EBS-Optimized Instances
+**What can be implemented to prevent traffic from the network to your EC2 instance from impacting the performance of traffic between your EC2 instance and an attached EBS volume?**
+- Implement network-optimized instances
+- Implement EBS-optimized instances
+- Put the EBS volume in one VPC and the instance in another
+- Place the EBS volume in one region and the instance in another
+
+**Correct Answer:** Implement EBS-optimized instances
+
+Using EBS-optimized instances will prevent regular instance network traffic from impacting communications between the instance and the EBS volume. It is never a good idea for performance to move storage farther away from the processing instance.
+
+---
+
+## EC2 Networking & Security
+
+### Question 11: Web Server and Database Connectivity
+**You are running and hosting a web application in AWS. The web server is hosted in an EC2 server in the public subnet, and it is using the Oracle database in RDS in a private subnet. All the users must use SSL to connect to the web server, and only the web server should be able to connect to the database server. Which of the following actions satisfy this condition? (Choose two.)**
+- Create a security group for the web server with inbound HTTPS traffic on port 443 from 0.0.0.0/0
+- Create an ACL for web server's subnet that allows HTTPS on port 443 from 0.0.0.0/0
+- Create an ACL for database server's subnet that allows inbound traffic on TCP port 1521
+- Create a security group for the database server allowing traffic on TCP port 1521 from the web server security group
+- Create a security group for the database server allowing inbound HTTPS traffic from port 443
+
+**Correct Answers:**
+- Create a security group for the web server with inbound HTTPS traffic on port 443 from 0.0.0.0/0
+- Create a security group for the database server allowing traffic on TCP port 1521 from the web server security group
+
+Security groups allow HTTPS traffic to the web server on port 443 from anywhere for users to connect. For the database, creating a security group specifying the actual port (1521) that needs to be open for the web server is correct.
+
+---
+
+### Question 12: MySQL Database on EC2 with NAT Issues
+**You have a MySQL database running on an EC2 instance in a private subnet. You can connect via SSH, but you are unable to apply updates to the database server via the NAT instance. What might you do to remedy this problem?**
+- Modify the security group to allow SSH traffic from anywhere
+- Replace the NAT instance
+- Ensure that "Source/Destination Checks" is disabled on the NAT instance
+- Ensure that the security group allows HTTP traffic
+
+**Correct Answer:** Ensure that "Source/Destination Checks" is disabled on the NAT instance
+
+When you create a NAT instance, it is important to disable "Source/Destination Checks". This means that the instance must be the source or destination of any traffic it sends or receives. NAT instances act as a gateway for traffic, so the Source/Destination Checks option needs to be disabled on the NAT instance to allow instances in private subnets to securely connect to the Internet.
+
+---
+
+### Question 13: Multi-Tier Web Hosting Architecture
+**You are implementing a web hosting architecture in AWS. Three EC2 instances are in use. The first is a web server, the second an application server, and the third is a database server. The web server communicates with the application server, but not with the database server. The application server communicates with the database server and the web server. Outside users may access the web server directly, but they cannot access other servers. What kind of secure architecture are you implementing?**
+- A monolithic secure architecture
+- A single-server secure architecture
+- A multi-tier secure architecture
+- A single-tier secure architecture
+
+**Correct Answer:** A multi-tier secure architecture
+
+The description is of a multi-tier or n-tier secure architecture – in this case, a three-tier architecture. It clearly demonstrates separation between web, application, and database layers with restricted communication paths.
+
+---
+
+### Question 13: Network Traffic to EC2 with Packet Processing
+**When considering NACLs and security groups, what is evaluated first when a packet is inbound to an EC2 instance?**
+- Neither, they are processed at the same time
+- Security group then NACL
+- NACL then security group
+- Neither, they cannot be used together
+
+**Correct Answer:** NACL then security group
+
+NACLs and security groups can be used together in the flow of traffic into an EC2 instance. Because the NACLs are associated with the subnet, they are processed first and then security groups, which are associated with the instance network interface, are processed.
+
+---
+
+## EC2 Administration & Operations
+
+### Question 14: OS Security Issues on EC2
+**Even if all best practices are being followed in IAM administration, what can present vulnerabilities related to your EC2 instances?**
+- Improper IAM group usage
+- Improper IAM user account creation
+- OS security issues within the instances
+- Improper IAM role usage
+
+**Correct Answer:** OS security issues within the instances
+
+Even when best practices are followed in IAM (which is focused on securing access to the AWS cloud), the operating systems running within your EC2 instances can still present security issues. AWS manages the virtual infrastructure, but the customer is responsible for the OS and application security running on the instances.
+
+---
+
+### Question 15: Security Patches on EC2 Instances
+**You are concerned about maintaining security patches on the 103 AWS EC2 instances that you run. All instances run Windows, Ubuntu Server, or Red Hat Enterprise Linux. What AWS service can assist you on properly and automatically patching these instances?**
+- AWS Systems Manager Patch Manager
+- AMI Manager
+- CloudFormation
+- CodeDeploy
+
+**Correct Answer:** AWS Systems Manager Patch Manager
+
+The AWS Systems Manager Patch Manager can automate security patches for supported Windows and Linux systems. It can also apply non-security patches to Linux systems. AMI Manager does not exist in AWS and the other services do not provide this functionality.
+
+---
+
+### Question 16: EC2 Instances on Project Cancellation
+**Your AWS environment contains several on-demand EC2 instances dedicated to a project that has just been cancelled. Your supervisor does not want to incur charges for these on-demand instances, but also does not want to lose the data just yet because there is a chance the project may be revived in the next few days. What should you do to minimize charges for these instances in the meantime?**
+- Stop the instances
+- Contact AWS Support and put the instances on courtesy hold
+- Create AMIs from the instances and put them on the AWS Marketplace
+- Terminate the instances
+
+**Correct Answer:** Stop the instances
+
+When data is stored in EBS volumes, the data will persist even if the instances are stopped. The EBS volumes persist the data, so it will always be there. When you stop an instance, you are not charged for the instance, only for the EBS storage. However, if you terminate the instance, you lose all instance store data.
+
+---
+
+### Question 17: Reserved Pricing for EC2
+**Scenario: You are using large-scale databases and intensive processing EC2 instances. If you know the amount of resources required for one year or more for an AWS EC2 instance or RDS database, what can be utilized to reduce costs by 40% or more?**
+- Reserved pricing
+- Free tier services
+- None of these
+- On-Demand pricing
+
+**Correct Answer:** Reserved pricing
+
+Reserved instances provide significant cost savings of 40-75% compared to On-Demand pricing when you can commit to using instances for 1, 3, or 5-year terms. This is ideal for predictable, consistent workloads.
+
+---
+
+### Question 18: EC2 Pay-Per-Minute Billing
+**Your supervisor criticizes your choice to keep instances running 24/7 even though they are only needed during business hours, stating that you could save significant money. What is the best approach?**
+- Implement EC2's pay-per-minute billing to get the maximum benefit
+- Change scheduling and tuning settings
+- Downsize instances to match hourly workload patterns
+- Propose closer monitoring and automation for hourly resizing
+
+**Correct Answer:** Implement EC2's pay-per-minute billing to get the maximum benefit
+
+AWS has launched a pay-per-minute billing feature, where billing occurs in increments of 60 seconds for certain types of instances. If cost control is a main objective, it makes sense to stop the instance whenever it is not in use, taking advantage of per-minute billing rather than per-hour.
+
+---
+
+### Question 19: EC2 Outbound Traffic Cost Monitoring
+**You must monitor the costs associated with your AWS account. What can you use to generate an alert should the outbound traffic exceed 250 GB for an on-demand EC2 instance?**
+- AWS CloudFront alerts
+- AWS Trusted Advisor alerts
+- AWS ElastiCache alerts
+- AWS Budget alerts
+
+**Correct Answer:** AWS Budget alerts
+
+The AWS Budget service can be configured with budgets for all areas of cost. Alerts can be sent via email or stored in S3 buckets. CloudFront is used for CDN caching and ElastiCache is an in-memory caching service. Trusted Advisor analyzes your account and makes suggestions, but does not provide direct budgetary control.
+
+---
+
+### Question 20: Data Transfer Costs with EC2
+**When storing data in EC2 instances, in addition to storage space requirements, what cost factor must be considered?**
+- Data transfer costs (from your local network to AWS)
+- Data transfer costs (from AWS to your local network)
+- Data encryption costs
+- Data decryption costs
+
+**Correct Answer:** Data transfer costs (from AWS to your local network)
+
+There is no cost for uploading to EC2 instances from the Internet (your local network). However, there is a cost for downloading data to the Internet (your local network). For example, with approximately 100 GB of transfer down to your local network per month, the cost would be approximately $9 per month (as of 2020).
+
+---
+
+### Question 21: Root-Level Access on EC2
+**Which of the following AWS services provide root-level access to the underlying operating system?**
+- Amazon RDS
+- Amazon DynamoDB
+- Amazon EC2
+- Amazon EMR
+
+**Correct Answers:** Amazon EC2 and Amazon EMR
+
+Only EC2 and EMR provide root-level access to the underlying OS. Amazon RDS and Amazon DynamoDB are managed services for which you don't have root-level access.
+
+---
+
+### Question 22: EC2 Free Tier Hours
+**How many hours of EC2 compute are provided in the free tier?**
+- 750
+- 1000
+- 500
+- 250
+
+**Correct Answer:** 750
+
+750 hours of compute are provided when using free tier instance classes for the first 12 months in AWS. Amazon RDS provides the same number of hours of compute for databases in the same 12-month window.
+
+---
+
+### Question 23: Proxy Server and NAT Issues with EC2 Updates
+**You work for a large software company in Seattle. The company has its production environment provisioned on AWS inside a custom VPC. The VPC contains both a public subnet and a private subnet. The company tests its applications on custom EC2 instances inside a private subnet. There are approximately 500 instances, and they communicate to the outside world via a proxy server. At 3 A.M. every night, the EC2 instances pull down OS updates, which are usually 150MB or so. They then apply these updates and reboot; however, if the software has not downloaded within half an hour, the update will attempt to download the following day. You notice that a number of EC2 instances are continually failing to download the updates in the allotted time. Which of the following answers might explain this failure? (Choose two.)**
+- The proxy server has only one Elastic IP address. Add additional Elastic IP addresses.
+- Your proxy server is blacklisting the address from which updates are being downloaded
+- The proxy server is in a private subnet using a NAT gateway instance that is too small
+- The proxy server has an inadequately sized EBS volume causing a disk space issue
+- The proxy server is on an inadequately sized EC2 instance without sufficient network throughput
+
+**Correct Answers:**
+- The proxy server is on an inadequately sized EC2 instance without sufficient network throughput
+- The proxy server is in a private subnet using a NAT gateway instance that is too small to handle traffic
+
+Network throughput is the obvious bottleneck. If the proxy server is in a public subnet, the proxy server instance size itself is not large enough. If it's in a private subnet, it must use a NAT gateway to communicate out to the Internet, and this NAT gateway may also be inadequately provisioned. You should therefore increase the size of both the proxy server and the NAT gateway.
+
+---
+
+## EC2 Scaling & High Availability
+
+### Question 24: Auto Scaling with Cost-Effective High Availability
+**You require a corporate-standard, highly available hosting solution. You need a load balancing solution with a multi-AZ deployment that includes both Spot and On-Demand instance types to meet the demand during peak loads, plus a database back end. What is the most cost-effective solution?**
+- Use ELB with On-Demand instances (primary) and Spot instances (secondary) with multi-AZ RDS
+- Use ELB with Spot instances (primary) and On-Demand instances (secondary) with multi-AZ RDS
+- Use ELB with Spot instances (primary) and On-Demand instances (secondary) with multi-AZ DynamoDB
+- Use ELB with On-Demand instances across multiple AZs with DynamoDB
+- Use ELB with Spot instances only and single-AZ RDS
+
+**Correct Answer:** Use ELB with Spot instances (primary) and On-Demand instances (secondary) with DynamoDB
+
+With proper scripting and scaling policies, the On-Demand instances behind the Spot instances will deliver the most cost-effective solution because the On-Demand instances will only spin up if the Spot instances are not available. DynamoDB is a regional service with built-in HA; there is no need to explicitly create a multi-AZ deployment. RDS would increase costs compared to DynamoDB for stateless web/app installations.
+
+---
+
+### Question 25: Auto Scaling Resource Constraints
+**Which one of the following resources cannot be automatically scaled with AWS Auto Scaling?**
+- EC2 Auto Scaling groups
+- Microsoft SQL Server RDS databases
+- DynamoDB tables
+- Aurora DB clusters
+
+**Correct Answer:** Microsoft SQL Server RDS databases
+
+You cannot scale Microsoft SQL Server or Oracle databases hosted in RDS. You can scale EC2 Auto Scaling groups, Aurora DB clusters, DynamoDB tables, DynamoDB global secondary indexes, ECS services, and Spot Fleet requests.
+
+---
+
+### Question 26: Auto Scaling and SQS for Traffic Spikes
+**You manage a Ruby on Rails application that lives on a cluster of EC2 instances. Your website occasionally experiences brief, strong, and entirely unpredictable spikes in traffic that overwhelm your EC2 instances' resources and freeze the application. As a result, you're losing recently submitted requests from end users. You use Auto Scaling to deploy additional resources to handle the load during spikes, but the new instances don't spin up fast enough to prevent the existing application servers from freezing. Which of the following actions will provide the most cost-effective solution in preventing the loss of recently submitted requests?**
+- Keep a large EC2 instance on standby
+- Increase the size of your existing EC2 instances
+- Use Amazon SQS to decouple the application components
+- Ask AWS support to pre-warm the Elastic Load Balancer
+
+**Correct Answer:** Use Amazon SQS to decouple the application components and keep the requests in queue
+
+The cost-effective solution to unpredictable spikes in traffic is to use SQS to decouple the application components. This allows requests to be queued while Auto Scaling instances are being provisioned to handle the load.
+
+---
+
+## Quick Reference Table
+
+| Topic | Key Concepts |
+|-------|--------------|
+| **Instance Types** | High I/O for IOPS, Memory-optimized for caching, Compute optimized for processing |
+| **Tenancy** | Dedicated Host (license locked), Dedicated Instance (isolated from other customers) |
+| **Pricing** | Spot (~90% discount), Reserved (40-75% discount), On-Demand (full price), Savings Plans |
+| **Storage** | EBS volumes max 28 per instance, Cold HDD (cost), Provisioned IOPS (performance) |
+| **Security** | NACL first, then Security Groups; OS patches via Systems Manager; IAM separate from OS |
+| **Networking** | EBS-optimized to prevent network impact, NAT requires Source/Destination Checks disabled |
+| **Scaling** | Auto Scaling for stateless, SQS for decoupling, DynamoDB for regional HA |
+| **Operations** | Stop to save costs + preserve EBS data, Terminate to delete everything |
+
+---
+
+## Key Concepts
+
+### EC2 Instance States
+- **Running**: Instance is active and incurring charges
+- **Stopped**: Instance is paused; EBS volumes persist; no compute charges (only storage)
+- **Terminated**: Instance is deleted; data is lost (except EBS if kept separate)
+
+### EC2 Billing
+- Charged per second (or per minute) minimum
+- No charge for data upload to EC2; charge for download from EC2
+- Reserved Instances provide 40-75% savings over On-Demand pricing
+- Spot Instances provide up to 90% savings but can be interrupted
+
+### EBS Performance
+- **Cold HDD**: Lowest cost, lowest performance
+- **General SSD**: Balanced cost and performance
+- **Provisioned IOPS SSD**: Highest performance, highest cost
+- **EBS-Optimized Instances**: Dedicated bandwidth between instance and EBS volume
+
+### EC2 & Security
+- EC2 provides root-level OS access (customer responsibility for OS security)
+- IAM controls AWS service access (AWS responsibility for infrastructure)
+- Security Groups: stateful, allow rules only, instance-level
+- NACLs: stateless, allow and deny rules, subnet-level
+
+### High Availability Patterns
+- Multi-AZ deployment of instances
+- Load balancer (ELB) for distribution
+- Auto Scaling for dynamic capacity
+- SQS for asynchronous decoupling
+- DynamoDB (regional) or Multi-AZ RDS for databases
+
 
 ## Simple Storage Service (S3) Basics
 
