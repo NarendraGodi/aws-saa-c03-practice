@@ -1716,9 +1716,9 @@ Which changes should be made to the database tier to improve performance?
 
 
 
-
+---
 # 🦠 IAM, Account and AWS Organizations
-
+---
 ## IAM Identity Policies
 
 - Users, groups and roles
@@ -2016,10 +2016,248 @@ AWS Control Tower orchestration extends the capabilities of AWS Organizations. T
 - Account can be closed or repurposed
 - Can be fully integrated with a business SDLC (Software Development Life Cycle)
 
+# AWS Organizations Certification Study Guide
+
+## AWS Organizations Fundamentals
+
+### Question 1: Aggregating AWS Accounts
+**What can be used to aggregate several AWS accounts for centralized management and billing tracking?**
+- AWS Budget
+- AWS Organizations
+- AWS Trusted Advisor
+- AWS Cost and Reporting
+
+**Correct Answer:** AWS Organizations
+
+AWS Organizations are collections of AWS accounts placed under centralized management. Organizations provide centralized policy-based management for multiple AWS accounts. Trusted Advisor provides suggestions for improved performance, security, and cost management. AWS Cost and Reporting and AWS Budget are used strictly for cost management and reporting.
+
+---
+
+## Service Control Policies (SCPs)
+
+### Question 2: Limiting Service Access with SCPs
+**A security team wants to limit access to specific services or actions in all of the team's AWS accounts. All accounts belong to a large organization in AWS Organizations. The solution must be scalable and there must be a single point where permissions can be maintained. What should a solutions architect do?**
+- Create an ACL to provide access to the services or actions
+- Create a service control policy in the root organizational unit to deny access to the services or actions
+- Create cross-account roles in each account to deny access to the services or actions
+- Create a security group to allow accounts and attach it to user groups
+
+**Correct Answer:** Create a service control policy in the root organizational unit to deny access to the services or actions
+
+Service Control Policies (SCPs) offer central control over the maximum available permissions for all accounts in your organization, allowing you to ensure your accounts stay within your organization's access control guidelines. Attaching an SCP to an AWS Organizations entity (root, OU, or account) defines a guardrail for what actions the principals can perform.
+
+**Important Note:** SCPs alone are not sufficient for allowing access in your organization. You still need to attach identity-based or resource-based policies to principals or resources in your organization's accounts to actually grant permissions to them.
+
+---
+
+### Question 3: Restricting EC2 Instance Types Across Organization
+**A company wants to restrict developers from launching large EC2 instances across all accounts within AWS Organizations. Which approach should be used?**
+- Create an IAM role in each account that denies the launch of large EC2 instances
+- Create a service-linked role for Amazon EC2 and attach a denial policy
+- Create a resource-based policy and attach it to EC2 in each account
+- Create a service control policy (SCP) in AWS Organizations that denies the launch of large EC2 instances
+
+**Correct Answer:** Create a service control policy (SCP) in AWS Organizations that denies the launch of large EC2 instances
+
+SCPs define guardrails that set limits on the actions the account's administrator can delegate to IAM users and roles in affected accounts. Using SCPs is more operationally efficient than creating IAM roles in each account individually, and provides centralized control across the entire organization.
+
+---
+
+### Question 4: EC2 Instance Tagging Compliance Control
+**A financial institution is designing the architecture for a new data processing platform on AWS. The institution uses organizational units (OUs) in AWS Organizations to manage its accounts. To comply with regulatory requirements, all Amazon EC2 instances must include a compliance-level tag with values of compliant or noncompliant. IAM users must not be allowed to create EC2 instances without this tag or modify the tag after creation. Which combination of steps will meet these requirements? (Select TWO.)**
+- Create an IAM policy that denies the deletion of tags on EC2 instances
+- Use AWS Config to check for compliance-level tags and remediate noncompliant resources
+- Create a tag policy in AWS Organizations to enforce the compliance-level tag with required values
+- Create a service control policy (SCP) to deny EC2 instance creation without the required tag
+- Use AWS Lambda with EventBridge to terminate noncompliant instances
+
+**Correct Answers:**
+- **Create a service control policy (SCP)** to deny the creation of EC2 instances if the compliance-level tag is not specified. Attach the SCP to the appropriate OU. SCPs enforce policies at creation time, preventing non-compliant instances from being launched.
+- **Create a tag policy in AWS Organizations** to enforce the use of the compliance-level tag with the required values. Tag policies enforce tagging standards for AWS resources across the organization.
+
+These two complementary approaches ensure both preventive controls (SCP denies non-compliant launches) and governance controls (tag policy enforces consistent tagging).
+
+---
+
+### Question 5: Enterprise Compliance Framework with Data Classification
+**An enterprise is developing an internal compliance framework for its cloud infrastructure hosted on AWS. The enterprise uses AWS Organizations to group accounts under various organizational units (OUs) based on departmental function. As part of its governance controls, the security team mandates that all Amazon EC2 instances must be tagged with a dataClassification tag ('confidential' or 'public'). IAM users must not be allowed to create EC2 instances without this tag or modify the tag after creation. Which combination of steps will meet these requirements? (Select TWO.)**
+- Enable AWS Config rules with automatic remediation via Systems Manager Automation
+- Create a tag enforcement Lambda function to identify and shut down noncompliant instances
+- Define a tag policy in AWS Organizations to enforce the dataClassification key
+- Create SCPs that deny ec2:RunInstances without the tag and deny ec2:DeleteTags on EC2 resources
+- Use IAM permission boundaries to restrict EC2-related actions
+
+**Correct Answers:**
+- **Define a tag policy in AWS Organizations** that enforces the dataClassification key and restricts values to 'confidential' and 'public'. Attach this tag policy to the applicable OU to enforce uniform tagging behavior across accounts.
+- **Create a service control policy (SCP)** that denies the ec2:RunInstances API action unless the required tag key is present, and a second SCP that denies the ec2:DeleteTags action for EC2 resources. Attach both SCPs to the relevant OU in AWS Organizations.
+
+This combination provides both preventive enforcement (SCPs block non-compliant actions) and governance standards (tag policies ensure tagging consistency).
+
+---
+
+## Access Control & S3 with Organizations
+
+### Question 6: Restricting S3 Access to Organization Members
+**A large company is using multiple AWS accounts as part of its cloud deployment model, structured using AWS Organizations. A Solutions Architect has been tasked with limiting access to an Amazon S3 bucket to only users of accounts that are enrolled with AWS Organizations. The Solutions Architect wants to avoid listing the many dozens of account IDs in the Bucket policy, as there are many accounts and frequent changes. Which strategy meets these requirements with the LEAST amount of effort?**
+- Add non-organizational accounts to an OU and attach an SCP which denies access to the S3 bucket
+- Use AWS Config and AWS Lambda to make remediations to the bucket policy dynamically
+- Use Attribute Based Access Control by referencing Tags of accounts in AWS Organizations
+- Use the global key of AWS Organizations within a bucket policy using the aws:PrincipalOrgID key
+
+**Correct Answer:** Use the global key of AWS Organizations within a bucket policy using the aws:PrincipalOrgID key
+
+The `aws:PrincipalOrgID` global condition key provides a simpler alternative to manually listing and updating all account IDs. When you add and remove accounts, policies that include this key automatically include the correct accounts without requiring manual policy updates.
+
+---
+
+### Question 7: S3 Access Control for Multiple Teams
+**A Solutions Architect for a large banking company is configuring access control within the organization for an Amazon S3 bucket containing thousands of financial records. There are 20 different teams which need to have access to this bucket, however they all need different permissions. These 20 teams correspond to 20 accounts within the banking company who are currently using AWS Organizations. What is the simplest way to achieve this while adhering to the principle of least privilege?**
+- Use S3 Access Points to administer different access policies to each team
+- Create a new AWS Organizations and assign each team to different Organizational Units
+- Separate the items in the bucket into new buckets with bucket policies for each account
+- Create the S3 Bucket in an individual account and configure cross-account IAM roles
+
+**Correct Answer:** Use S3 Access Points to administer different access policies to each team, and control access points using Service Control Policies within AWS Organizations
+
+Amazon S3 Access Points simplify data access for AWS services and customer applications. With S3 Access Points, you can create unique access control policies for each access point to easily control access to shared datasets. You can also control access point usage using AWS Organizations support for AWS SCPs, providing a clean and scalable solution for managing permissions across multiple teams and accounts.
+
+---
+
+## VPC Sharing Across Organization
+
+### Question 8: Sharing VPCs Across Organization Accounts
+**A retail company uses AWS Cloud to manage its IT infrastructure. The company has set up AWS Organizations to manage several departments running their AWS accounts and using resources such as Amazon EC2 instances and Amazon RDS databases. The company wants to provide shared and centrally-managed VPCs to all departments using applications that need a high degree of interconnectivity. Which solution meets these requirements?**
+- Use VPC sharing to share a VPC with other AWS accounts in the organization
+- Use VPC sharing to share subnets with other AWS accounts in the organization
+- Use VPC peering to share subnets with other AWS accounts in the organization
+- Use VPC peering to share a VPC with other AWS accounts in the organization
+
+**Correct Answer:** Use VPC sharing to share subnets with other AWS accounts in the organization
+
+VPC sharing (part of Resource Access Manager) allows multiple AWS accounts to create their application resources into shared and centrally-managed VPCs. To set this up, the account that owns the VPC (owner) shares one or more subnets with other accounts (participants) that belong to the same organization. The owner account cannot share the VPC itself, only subnets. After subnets are shared, participants can view, create, modify, and delete their application resources in the shared subnets while maintaining separation from other participants' resources.
+
+---
+
+## Account Management & AWS Control Tower
+
+### Question 9: Automating Account Creation and Governance
+**A company is launching a new internal platform for managing multiple independent projects. Each project will require its own dedicated AWS account for isolation. The company needs a solution that automates account creation, applies mandatory security guardrails, and centrally manages shared networking resources such as VPNs and subnets for the accounts. The solution must minimize manual effort and ensure compliance with security standards. Which solution will meet these requirements with the LEAST operational overhead?**
+- Use AWS Organizations to create accounts, deploy a shared VPC, configure Firewall Manager, and manually configure routing
+- Use AWS Control Tower to automate account provisioning, create a networking account with a central VPC, use AWS RAM to share subnets, and enforce guardrails
+- Use AWS Control Tower to set up accounts with pre-configured VPCs, connect through a transit gateway, and enforce controls with AWS Config
+- Use AWS Organizations to create accounts manually, deploy a VPC, use AWS RAM to share subnets, and manually configure security policies
+
+**Correct Answer:** Use AWS Control Tower to automate account provisioning, create a dedicated networking account with a centralized VPC, use AWS Resource Access Manager (AWS RAM) to share subnets with project accounts, and enforce security guardrails by using AWS Control Tower guardrails
+
+AWS Control Tower simplifies account setup with built-in security guardrails. It automates VPC sharing via AWS RAM and reduces operational overhead by automating guardrail enforcement. Control Tower provides a landing zone that includes centralized logging, account management, and baseline security controls.
+
+---
+
+## Networking & Security Appliances
+
+### Question 10: Centralized Security Appliance in AWS Organizations
+**A financial services company operates multiple internal services across various AWS accounts. The company uses AWS Organizations to manage these accounts and needs a centralized security appliance in a networking account to inspect all inter-service communication between AWS accounts. The solution must ensure secure and efficient routing of traffic through the security appliance. Which solution will meet these requirements?**
+- Deploy a Network Load Balancer (NLB) in the networking account and configure service accounts to send traffic via VPC peering
+- Deploy an Application Load Balancer (ALB) in the networking account and configure via private link
+- Deploy a Gateway Load Balancer (GWLB) in the networking account and configure service accounts to send traffic via GWLB endpoints
+- Deploy interface VPC endpoints in the networking account and configure the security appliance to inspect traffic
+
+**Correct Answer:** Deploy a Gateway Load Balancer (GWLB) in the networking account and configure service accounts to send traffic to the GWLB using Gateway Load Balancer endpoints in each service account
+
+The Gateway Load Balancer is specifically designed to simplify the deployment of security appliances. Using GWLB endpoints in service accounts ensures efficient routing and centralized inspection of traffic. GWLB operates at Layer 3/4 (network/transport layer) and is optimized for routing traffic through security appliances.
+
+---
+
+## Quick Reference: AWS Organizations Features
+
+| Feature | Purpose | Use Case |
+|---------|---------|----------|
+| **SCPs (Service Control Policies)** | Define maximum permissions guardrails | Restrict actions across all accounts |
+| **Tag Policies** | Enforce consistent tagging standards | Compliance and resource tracking |
+| **Backup Policies** | Centralize backup requirements | Disaster recovery compliance |
+| **AI Services Policies** | Control AI/ML service usage | Compliance with regulations |
+| **Account Management** | Create and manage member accounts | Multi-account governance |
+| **OUs (Organizational Units)** | Hierarchical account grouping | Apply policies to groups |
+| **Consolidated Billing** | Centralized billing across accounts | Cost tracking and optimization |
+
+---
+
+## Key Concepts
+
+### Service Control Policies (SCPs)
+- **Definition**: JSON policies that specify maximum permissions for an organization or OU
+- **Scope**: Applied at root, OU, or account level
+- **Effect**: Limits what IAM users and roles can do (acts as a guardrail)
+- **Important**: SCPs define maximum permissions but don't grant permissions themselves
+- **Requirement**: Requires SCP-only management feature or all features enabled in organization
+
+### Tag Policies
+- **Definition**: Policies that enforce standardized tagging across AWS resources
+- **Scope**: Applied at root, OU, or account level
+- **Purpose**: Ensure consistent tagging for governance and compliance
+- **Validation**: Flags noncompliant resources but doesn't prevent creation
+- **Use Case**: Regulatory compliance, cost allocation, resource management
+
+### VPC Sharing
+- **Mechanism**: Part of AWS Resource Access Manager (AWS RAM)
+- **Shares**: Subnets, not entire VPCs
+- **Requirement**: Accounts must belong to same organization in AWS Organizations
+- **Participants**: Can create resources in shared subnets but can't see others' resources
+- **Use Case**: Shared infrastructure, reduced VPC sprawl, centralized networking
+
+### aws:PrincipalOrgID Condition Key
+- **Purpose**: Restrict access based on AWS Organization membership
+- **Benefits**: Automatically includes/excludes accounts as they join/leave organization
+- **Eliminates**: Need to maintain lists of account IDs in policies
+- **Scope**: Works across AWS services that support resource-based policies
+- **Example**: S3 bucket policies, KMS key policies
+
+### AWS Control Tower
+- **Automation**: Automates account creation and baseline configuration
+- **Guardrails**: Provides preventive and detective guardrails
+- **Landing Zone**: Establishes a well-architected, secure multi-account AWS environment
+- **Integration**: Works with AWS Organizations, AWS RAM, and CloudFormation
+- **Overhead**: Minimizes operational overhead through automation
+
+### Account Factory (Control Tower)
+- **Purpose**: Simplifies creation of new AWS accounts
+- **Configuration**: Pre-configured with guardrails and baseline policies
+- **Integration**: Automatically enrolls accounts in AWS Organizations
+- **Networking**: Can automatically create and share VPCs
+- **Compliance**: Ensures new accounts follow organizational standards
+
+---
+
+## Best Practices with AWS Organizations
+
+1. **SCPs First**: Start with restrictive SCPs and gradually grant permissions rather than denying
+2. **Use OUs Strategically**: Organize accounts by function, environment, or business unit
+3. **Tag Everything**: Use tag policies to enforce consistent tagging from the start
+4. **Enable All Features**: Use "all features" mode rather than consolidated billing-only
+5. **Monitor Compliance**: Use AWS Config and AWS CloudTrail with Organizations
+6. **Least Privilege**: Apply principle of least privilege across organization
+7. **Centralized Logging**: Enable CloudTrail logs to a central account for audit
+8. **VPC Sharing**: Use for multi-account applications requiring high interconnectivity
+
+---
+
+## Organizations vs. Traditional Multi-Account Approaches
+
+| Aspect | AWS Organizations | Traditional Multi-Account |
+|--------|-------------------|--------------------------|
+| **Management** | Centralized | Decentralized |
+| **Policies** | SCPs at organization level | IAM policies per account |
+| **Billing** | Consolidated from payer account | Individual accounts |
+| **Governance** | Organization-wide policies | Per-account policies |
+| **Scalability** | Scales to thousands of accounts | Limited scalability |
+| **Compliance** | Enforceable across organization | Difficult to enforce |
+| **Overhead** | Lower operational overhead | Higher operational overhead |
 
 
+
+---
 # 💾 Simple Storage Service S3
-
+---
 ## S3 Security
 
 > *S3 is private **by default***
