@@ -8,9 +8,9 @@ This page contains notes primarily from Adrian Cantrill’s [AWS Solutions Archi
 - https://github.com/alozano-77/AWS-SAA-C02-Course#16-elastic-cloud-compute-ec2
 - https://tutorialsdojo.com/aws-cheat-sheets/
 
-
+---
 # 🧔 Accounts - Identity and Access Management (IAM) Basics
-
+---
 ## Account and IAM **Basics**
 
 💡 **AWS Account:** Container for **identities** (users) and **resources.** 
@@ -446,9 +446,9 @@ May be good practice to create multiple AWS Accounts for different uses (prod, d
 - **Shared Responsibility Model**: AWS secures the infrastructure, you secure your resources
 
 
-
+---
 # ☁️ Cloud Computing Fundamentals
-
+---
 ## Essential Characteristics of Cloud Computing
 
 💡 **On demand self-service:** A consumer can unilaterally provision computing capabilities, such as server time and network storage, as needed automatically without requiring human interaction with each service provider. 
@@ -617,9 +617,9 @@ Resources:
 ```
 
 
-
+---
 # 🐣 AWS Fundamentals
-
+---
 ## Public vs Private Services
 
 ![Untitled](img/Untitled.png)
@@ -1170,10 +1170,8 @@ The cost-effective solution to unpredictable spikes in traffic is to use SQS to 
 - DynamoDB (regional) or Multi-AZ RDS for databases
 
 ---
+#Simple Storage Service (S3) Basics
 ---
-
-## Simple Storage Service (S3) Basics
-
 - Global Storage Platform - regional based/resilient
     - Data is replicated across AZs in that region
 - Public service, unlimited data & multi-user
