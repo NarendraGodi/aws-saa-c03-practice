@@ -19,15 +19,16 @@ This page contains notes primarily from Adrian Cantrill’s [AWS Solutions Archi
 7. [IAM, Account and AWS Organizations](#-iam-account-and-aws-organizations)
 8. [AWS Organizations Certification Study Guide](#aws-organizations-certification-study-guide)
 9. [Simple Storage Service S3](#-simple-storage-service-s3)
-10. [Virtual Private Cloud (VPC)](#️-virtual-private-cloud-vpc)
-11. [Elastic Compute Cloud (EC2) Basics](#-elastic-compute-cloud-ec2-basics)
-12. [Containers & ECS](#-containers--ecs)
-13. [Advanced EC2](#-advanced-ec2)
-14. [Route 53 - Global DNS](#️-route-53---global-dns)
-15. [Relational Database Service (RDS)](#-relational-database-service-rds)
-16. [Network Storage & Data Lifecycle](#-network-storage--data-lifecycle)
-17. [High Availability (HA) & Scaling](#️-high-availability-ha--scaling)
-18. [Serverless and Application Services](#-serverless-and-application-services)
+10. [AWS S3 Buckets Certification Study Guide](#-aws-s3-buckets-certification-study-guide)
+11. [Virtual Private Cloud (VPC)](#️-virtual-private-cloud-vpc)
+12. [Elastic Compute Cloud (EC2) Basics](#-elastic-compute-cloud-ec2-basics)
+13. [Containers & ECS](#-containers--ecs)
+14. [Advanced EC2](#-advanced-ec2)
+15. [Route 53 - Global DNS](#️-route-53---global-dns)
+16. [Relational Database Service (RDS)](#-relational-database-service-rds)
+17. [Network Storage & Data Lifecycle](#-network-storage--data-lifecycle)
+18. [High Availability (HA) & Scaling](#️-high-availability-ha--scaling)
+19. [Serverless and Application Services](#-serverless-and-application-services)
 
 ---
 # 🧔 Accounts - Identity and Access Management (IAM) Basics
@@ -2386,6 +2387,367 @@ Versioning lets you store multiple versions of objects within a bucket. Operatio
 - Transfers data via the AWS network - more efficient than public internet
 - Lower, consistent latency
 - The worse the initial connection, the bigger the gain of uses accelerated transfer
+
+  
+# AWS S3 Buckets Certification Study Guide
+
+## Static Website Hosting with S3
+
+### Question 1: Custom Domain Names with S3
+**To use a custom domain name and URL when hosting a static website in a bucket, what two services of AWS are required?**
+- S3 and DynDNS
+- S3 and ELB
+- S3 and Route 53
+- S3 and ElastiCache
+
+**Correct Answer:** S3 and Route 53
+
+S3 is used to store the static website files; however, it would use a URL like `bucket_name.s3-website-us-west-1.amazonaws.com`. To use a custom domain name, Route 53, the AWS DNS service, is required. DynDNS is not an AWS service. ELB and ElastiCache will not help provide a custom DNS name.
+
+---
+
+### Question 2: Simplest Solution for Static Website Hosting
+**You have been asked to host a static website in AWS as quickly as possible. What is the simplest solution to use?**
+- S3
+- EFS
+- ELB
+- EC2 instance
+
+**Correct Answer:** S3
+
+The simplest solution is to place the website files into an S3 bucket and then enable web sharing on the bucket and associate it with a DNS name. ELB and EFS do not directly provide hosting. An EC2 instance would require instantiating a full instance, configuring the web service on the instance, and then placing the website files into it, which is more complex.
+
+---
+
+## S3 Bucket Structure & Organization
+
+### Question 3: Folder-Like Structure in S3 Buckets
+**You have been asked to provide a folder-like structure in S3 buckets. How can this be accomplished?**
+- Using actual directories
+- Using nested S3 buckets
+- Using prefixes and delimiters
+- Using actual folders
+
+**Correct Answer:** Using prefixes and delimiters
+
+S3 buckets do not support folders or directories per se; however, they can give the appearance of folders using prefixes and delimiters as part of the object name. For example, the object `account/2019.csv` uses the prefix "account" and the delimiter "/". Nested S3 buckets are not supported.
+
+---
+
+## S3 Bucket Basics & Limits
+
+### Question 4: Default S3 Bucket Limit
+**What is the default limit on the number of S3 buckets that can be created by an account?**
+- 100
+- 50
+- 200
+- 150
+
+**Correct Answer:** 100
+
+The default limit is 100 S3 buckets per account. However, you can request an upgrade to create more S3 buckets.
+
+---
+
+### Question 5: Cost of Creating S3 Buckets
+**What is the up-front cost incurred by creating S3 buckets?**
+- Variable depending on bucket configuration parameters
+- $0
+- $10 per bucket
+- $100 per bucket
+
+**Correct Answer:** $0
+
+The creation of S3 buckets does not incur cost. Costs accrue based on the usage of the bucket (storage consumed and data transferred).
+
+---
+
+### Question 6: What Cannot Be Specified for S3 Bucket
+**What cannot be specified for an S3 bucket?**
+- The name
+- Encryption
+- The Availability Zone (AZ)
+- The permissions
+
+**Correct Answer:** The Availability Zone (AZ)
+
+While S3 buckets are stored in an AZ, you cannot specify into which AZ it should be placed. Regardless of the S3 storage class, the AZ is selected automatically by AWS.
+
+---
+
+## S3 Region Selection & Performance
+
+### Question 7: Choosing a Specific Region for S3 Bucket
+**Why might you choose a specific region when creating an S3 bucket rather than accepting a default region?**
+- To place the bucket closer to the users for improved performance
+- To ensure permissions can be configured on the bucket
+- To ensure the data is stored with encryption
+- To place the bucket closer to AWS headquarters
+
+**Correct Answer:** To place the bucket closer to the users for improved performance
+
+By selecting a region closer to the primary users of the bucket, you can enhance performance for those users. Encryption and permissions may be configured regardless of where the bucket is physically stored.
+
+---
+
+## S3 Storage & Encryption
+
+### Question 8: Storage Classes and Encryption Support
+**You must implement an S3 storage solution that encrypts data at rest in the S3 buckets. Which S3 storage class supports at-rest data encryption?**
+- S3-Standard
+- S3-One Zone-IA
+- All of these
+- S3-IA
+
+**Correct Answer:** All of these
+
+All S3 storage classes support at-rest data encryption. Additionally, SSL may be used for encryption during transmission as data is placed into the S3 buckets or read from the S3 buckets.
+
+---
+
+### Question 9: Default S3 Bucket Access Restrictions
+**You are defining appropriate security options for S3 buckets in AWS. As part of the process, you must identify the default access restrictions on S3 buckets. Which one of the following best describes the default access restrictions in place on S3 buckets?**
+- Only bucket and object owners have access to the resources they create
+- Anonymous users have access to all S3 buckets and objects
+- Only IAM administrators have access to S3 buckets
+- All IAM users have access to all S3 buckets and objects
+
+**Correct Answer:** Only bucket and object owners have access to the resources they create
+
+By default, only bucket and object owners have access to the resources they create, and other users must be granted access or access must be granted to public or anonymous users, if desired.
+
+---
+
+## S3 Data Transfer & Uploads
+
+### Question 10: HTTP Response for Successful S3 Upload
+**What HTTP response is given upon a successful upload of a file to an S3 bucket?**
+- 200
+- 500
+- 400
+- 300
+
+**Correct Answer:** 200
+
+HTTP 200 is the success response code. HTTP 500 indicates an internal server error. HTTP 300 indicates a redirect. HTTP 400 is a missing object response code.
+
+---
+
+### Question 11: Default Upload Operation Type
+**What is the default upload operation type for data transferred to an S3 bucket?**
+- A single PUT operation
+- FTP transmission
+- sFTP transmission
+- A multi-part PUT operation
+
+**Correct Answer:** A single PUT operation
+
+By default, all files transferred to an S3 bucket are transferred using a single PUT operation. AWS suggests that files up to 100 MB in size can be transferred using this default operation. Larger files may require uploads through multi-part operations.
+
+---
+
+### Question 12: HTTP Methods with Eventual Consistency
+**HTTP is used to upload to S3 buckets. Which HTTP method has eventual consistency with S3 bucket writes?**
+- Updates
+- Deletes
+- Erases
+- PUTs of new files
+
+**Correct Answer:** Deletes
+
+Deletes and Overwrite PUTs have eventual consistency. Others have write and then read consistency. Erases are not supported.
+
+---
+
+## S3 Integration with AWS Services
+
+### Question 13: Storage Gateway Connection to S3
+**What is used to cache, or store, data and connect with S3 buckets from the on-premises customer location?**
+- Storage gateway
+- NAC gateway
+- Customer gateway
+- Virtual private gateway
+
+**Correct Answer:** Storage gateway
+
+The storage gateway is used to connect the customer location to an S3 bucket and to cache and store data locally for faster access. The customer and virtual private gateways are used to establish VPNs. No such entity as a NAC gateway exists in association with AWS.
+
+---
+
+### Question 14: Cost and Usage Reports Storage
+**Where are AWS Cost and Usage Reports stored?**
+- EBS volumes
+- S3 bucket
+- They are not stored, they are sent via e-mail
+- In unmanaged, no-cost storage
+
+**Correct Answer:** S3 bucket
+
+Cost and Usage Reports are generated from Redshift or QuickSight data source and are stored in S3 buckets. The Cost and Usage Reports interface provides an option to create an S3 bucket, appropriately configured, for report storage.
+
+---
+
+## S3 Security & Access Control
+
+### Question 15: Sharing S3 Objects - Presigned URLs
+**An application upgrade caused some issues with stability. The application owner enabled logging and has generated a 5 GB log file in an Amazon S3 bucket. The log file must be securely shared with the application vendor to troubleshoot the issues. What is the MOST secure way to share the log file?**
+- Create access keys using an administrative account and share them with the vendor
+- Generate a presigned URL and ask the vendor to download before expiration
+- Create an IAM user for the vendor with MFA enabled
+- Enable default encryption and public access, provide the S3 URL
+
+**Correct Answer:** Generate a presigned URL and ask the vendor to download before expiration
+
+A presigned URL gives access to the object identified in the URL. The presigned URLs are valid only for the specified duration. This is the most secure way to provide the vendor with time-limited access to the log file in the S3 bucket.
+
+**Why Others Are Wrong:**
+- Creating access keys shares administrative permissions (insecure)
+- Creating an IAM user requires permanent AWS account setup
+- Enabling public access exposes the bucket to anyone
+
+---
+
+## S3 with CloudFront Distribution
+
+### Question 16: Global Software Distribution with CloudFront
+**A global manufacturing company uses AWS Outposts servers to manage IoT workloads in factories across multiple continents. The company regularly updates factory IoT software (50 files) from a central Amazon S3 bucket in us-east-1. Factories report significant delays when downloading updates. How should the company minimize latency for distributing software updates globally?**
+- Create S3 buckets in multiple Regions with Cross-Region Replication
+- Deploy AWS Outposts servers as S3 endpoints with local caching
+- Set up CloudFront distribution with S3 as origin, use signed URLs
+- Configure Amazon S3 Transfer Acceleration
+
+**Correct Answer:** Set up CloudFront distribution with S3 as origin, use signed URLs
+
+CloudFront caches the software updates at edge locations around the world, significantly reducing latency. Signed URLs ensure secure access, and the solution requires minimal operational overhead compared to managing multiple buckets or configuring Outposts endpoints.
+
+---
+
+## S3 with Cognito Integration
+
+### Question 17: Secure S3 Upload with Cognito User Pool
+**A company runs an application in a private subnet within a VPC. The application is integrated with Amazon Cognito using a user pool for user authentication. The company wants to enable users to securely upload and store their documents in an Amazon S3 bucket. What combination of steps should the company take? (Select TWO.)**
+- Configure the application to generate Amazon S3 access tokens from Cognito user pool
+- Assign IAM roles directly to the S3 bucket
+- Enable Amazon S3 VPC endpoints in the VPC
+- Configure Amazon Cognito identity pool for temporary S3 credentials
+- Add a bucket policy to deny requests without valid Cognito credentials
+
+**Correct Answers:**
+- **Configure an Amazon Cognito identity pool** to provide temporary credentials for Amazon S3 when users authenticate through the user pool. The identity pool grants temporary AWS credentials for accessing S3.
+- **Enable Amazon S3 VPC endpoints** in the VPC to ensure private connectivity between the application and the S3 bucket. This ensures traffic remains within the AWS network, improving security.
+
+---
+
+## S3 for On-Premises Access
+
+### Question 18: On-Premises Secure Access to S3
+**A financial services company stores transaction records in an Amazon S3 bucket. The company runs its analytics application on a cluster of on-premises servers. The application needs temporary, secure access to the S3 bucket. The company uses AWS IAM Identity Center to manage identities. Which solution will meet these requirements?**
+- Use AWS Systems Manager to store access keys in Parameter Store
+- Create an S3 bucket policy allowing access from public IP range
+- Deploy AWS Storage Gateway File Gateway with NFS/SMB
+- Use IAM Roles Anywhere to issue temporary credentials
+
+**Correct Answer:** Use IAM Roles Anywhere to issue temporary credentials
+
+IAM Roles Anywhere provides a secure and scalable method for on-premises workloads to obtain temporary AWS credentials. It avoids long-term credential storage and integrates with IAM Identity Center to ensure least privilege access.
+
+**Why Others Are Wrong:**
+- Systems Manager Parameter Store stores long-term credentials (security risk)
+- Public IP range access is insecure and violates least privilege principle
+- Storage Gateway adds unnecessary complexity for this use case
+
+---
+
+## Quick Reference: S3 Features
+
+| Feature | Purpose | Use Case |
+|---------|---------|----------|
+| **Prefixes & Delimiters** | Organize objects with folder-like structure | Organize large datasets |
+| **Presigned URLs** | Time-limited secure access without IAM | Sharing objects with external users |
+| **CloudFront** | Global content delivery caching | Reduce latency for global users |
+| **VPC Endpoints** | Private connectivity to S3 | Avoid internet gateway/NAT requirements |
+| **Cross-Region Replication** | Automatic replication to another region | Disaster recovery, compliance |
+| **Transfer Acceleration** | Accelerate uploads over long distances | Fast uploads from remote locations |
+| **Storage Classes** | Different latency/cost options | Cost optimization by access pattern |
+| **Encryption** | At-rest and in-transit protection | Compliance and security |
+
+---
+
+## Key S3 Concepts
+
+### S3 Bucket Structure
+- **Bucket Names**: Globally unique, must be DNS-compliant
+- **Objects**: Files stored in buckets with keys (full path)
+- **Folders**: Not native; simulated using prefixes and delimiters
+
+### S3 Consistency Model
+- **New Objects (PUTs)**: Read-after-write consistency
+- **Overwrite PUTs & Deletes**: Eventual consistency
+
+### S3 Security
+- **Default Access**: Only owner has access
+- **Presigned URLs**: Temporary, time-limited, cryptographically signed
+- **Bucket Policies**: Resource-based policies controlling access
+- **IAM Policies**: Identity-based policies for AWS principals
+- **ACLs**: Legacy access control method (bucket and object level)
+
+### S3 Performance
+- **Single Region**: Regional resilience, data replicated across AZs
+- **Multi-Region Strategy**: CloudFront for caching, Cross-Region Replication for redundancy
+- **Transfer Acceleration**: Uses CloudFront edge locations for faster uploads
+- **CloudFront Integration**: Caches at 500+ edge locations globally
+
+### S3 Storage Classes
+- **S3 Standard**: Default, immediate access, all redundancy features
+- **S3 Standard-IA**: Lower cost for infrequent access, minimum 30-day retention
+- **S3 One Zone-IA**: Single AZ, lowest cost for IA, not resilient
+- **S3 Glacier**: Archive storage, retrieval takes hours
+- **S3 Intelligent-Tiering**: Automatic cost optimization
+
+### S3 Data Transfer
+- **Uploads**: Single PUT up to 5GB; multi-part for larger files
+- **HTTP 200**: Successful upload response
+- **No Cost**: For data uploading to S3 from internet
+- **Cost for Downloads**: Data transfer out to internet incurs charges
+- **VPC Endpoint**: Avoid internet gateway charges with gateway endpoint
+
+### S3 Integration Points
+- **CloudFront**: CDN caching and distribution
+- **Cognito**: User authentication with identity pools for S3 access
+- **CloudTrail**: Audit API calls to S3
+- **EventBridge**: Trigger actions on S3 events
+- **Lambda**: Process objects with serverless functions
+- **Cost & Usage Reports**: Billing data storage destination
+
+---
+
+## Best Practices with S3
+
+1. **Security First**: Enable bucket versioning, MFA delete, and set restrictive default ACLs
+2. **Encryption**: Use SSE-S3 or SSE-KMS for sensitive data at rest
+3. **Presigned URLs**: Use for temporary, time-limited access instead of permanent credentials
+4. **Organize Objects**: Use consistent prefixes and delimiters for logical organization
+5. **Regional Selection**: Choose region closest to your users for best performance
+6. **Cost Optimization**: Use appropriate storage classes based on access patterns
+7. **Monitoring**: Enable CloudTrail logging and CloudWatch monitoring
+8. **VPC Endpoints**: Use gateway endpoint to avoid NAT gateway charges
+9. **Avoid Public Access**: Default to private, explicitly allow only where necessary
+10. **Credentials**: Never use root account or permanent access keys; prefer temporary credentials
+
+---
+
+## S3 vs Other AWS Storage Options
+
+| Storage | Best For | Access | Cost |
+|---------|----------|--------|------|
+| **S3** | Object storage, static websites, archives | HTTP/HTTPS REST API | PAYG with class options |
+| **EBS** | EC2 block storage, databases | Block-level, read/write | Persistent charges |
+| **EFS** | Shared file system, NFS | NAS-like, multi-attach | Based on storage/throughput |
+| **Glacier** | Long-term archives | Retrieval (hours) | Very low $/GB, retrieval fees |
+| **FSx** | Windows/Lustre, managed file systems | NFS, SMB, Lustre | Provisioned capacity |
+
+
+
 
 ## Key Management Service (KMS)
 
