@@ -1169,6 +1169,8 @@ The cost-effective solution to unpredictable spikes in traffic is to use SQS to 
 - SQS for asynchronous decoupling
 - DynamoDB (regional) or Multi-AZ RDS for databases
 
+---
+---
 
 ## Simple Storage Service (S3) Basics
 
