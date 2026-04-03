@@ -8,6 +8,27 @@ This page contains notes primarily from Adrian Cantrill’s [AWS Solutions Archi
 - https://github.com/alozano-77/AWS-SAA-C02-Course#16-elastic-cloud-compute-ec2
 - https://tutorialsdojo.com/aws-cheat-sheets/
 
+## 📑 Table of Contents
+
+1. [Accounts - Identity and Access Management (IAM) Basics](#-accounts---identity-and-access-management-iam-basics)
+2. [AWS SAA-C03 IAM Questions](#aws-saa-c03-iam-questions)
+3. [Cloud Computing Fundamentals](#️-cloud-computing-fundamentals)
+4. [AWS Fundamentals](#-aws-fundamentals)
+5. [EC2 Certification Study Guide](#ec2-certification-study-guide)
+6. [AWS SAA-C03 DNS and Route 53 Questions](#aws-saa-c03-dns-and-route-53-questions)
+7. [IAM, Account and AWS Organizations](#-iam-account-and-aws-organizations)
+8. [AWS Organizations Certification Study Guide](#aws-organizations-certification-study-guide)
+9. [Simple Storage Service S3](#-simple-storage-service-s3)
+10. [Virtual Private Cloud (VPC)](#️-virtual-private-cloud-vpc)
+11. [Elastic Compute Cloud (EC2) Basics](#-elastic-compute-cloud-ec2-basics)
+12. [Containers & ECS](#-containers--ecs)
+13. [Advanced EC2](#-advanced-ec2)
+14. [Route 53 - Global DNS](#️-route-53---global-dns)
+15. [Relational Database Service (RDS)](#-relational-database-service-rds)
+16. [Network Storage & Data Lifecycle](#-network-storage--data-lifecycle)
+17. [High Availability (HA) & Scaling](#️-high-availability-ha--scaling)
+18. [Serverless and Application Services](#-serverless-and-application-services)
+
 ---
 # 🧔 Accounts - Identity and Access Management (IAM) Basics
 ---
